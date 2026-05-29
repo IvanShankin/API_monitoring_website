@@ -1,12 +1,17 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from passlib.context import CryptContext
 
 from src.config import create_config
+from src.models.api.exception_handler import register_exception_handlers
+from src.models.users.views import router as user_router
 
 
 def _include_routers(app: FastAPI) -> FastAPI:
-    pass
+    app.include_router(user_router)
+    return app
+
 
 def init_fastapi_app() -> FastAPI:
     app = FastAPI(
@@ -15,6 +20,7 @@ def init_fastapi_app() -> FastAPI:
     )
 
     app.state.config = create_config()
+    register_exception_handlers(app)
 
     _include_routers(app)
 
@@ -24,6 +30,10 @@ def init_fastapi_app() -> FastAPI:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.config = create_config()
+    app.state.cr_context = CryptContext(
+        schemes=["bcrypt"],
+        deprecated="auto"
+    )
 
     try:
         yield
