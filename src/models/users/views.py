@@ -14,12 +14,3 @@ async def get_me():
     pass
     # Сперва сделать сервис аунтификации
 
-
-@router.post("/register", response_model=UsersDTO, status_code=status.HTTP_200_OK)
-async def register_user(
-    data: RegisterUserRequestDTO,
-    user_service: UsersService = Depends(get_user_service)
-):
-    return await user_service.create_user(new_user=data)
-
-
