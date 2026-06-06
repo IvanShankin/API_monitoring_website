@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
 from src.models.users.depends import get_user_service
-from src.models.users.dto_models import UsersDTO, RegisterUserRequestDTO, TokenResponse
+from src.models.users.dto_models import UsersDTO, RegisterUserRequestDTO
 from src.models.users.service import UsersService
 
 router = APIRouter()

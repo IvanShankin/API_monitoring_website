@@ -25,7 +25,7 @@ class UsersService:
         :return: хэш пароля"""
         return self.cr_context.hash(password)
 
-    def _verify_password(self, plain_password: str, hashed_password: str) -> bool:
+    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         """
         Проверяет, совпадает ли пароль с хешем
         :param plain_password: простой пароль (qwerty)
@@ -34,7 +34,15 @@ class UsersService:
         """
         return self.cr_context.verify(plain_password, hashed_password)
 
-    async def get_user_by_username(self, email: str) -> UsersDTO | None:
+    async def get_user_by_username_or_email(self, username_or_email: str) -> UsersDTO | None:
+        result = await self.users_repo.get_user_by_username_or_email(username_or_email)
+        return UsersDTO.model_validate(result) if result else None
+
+    async def get_user_by_id(self, user_id: int) -> UsersDTO | None:
+        result = await self.users_repo.get_user_by_id(user_id)
+        return UsersDTO.model_validate(result) if result else None
+
+    async def get_user_by_email(self, email: str) -> UsersDTO | None:
         result = await self.users_repo.get_user_by_email(email)
         return UsersDTO.model_validate(result) if result else None
 
@@ -45,7 +53,7 @@ class UsersService:
         """
         :raises UserAlreadyExit:
         """
-        if await self.get_user_by_username(new_user.email):
+        if await self.get_user_by_username_or_email(new_user.email):
             raise UserAlreadyExit()
 
         hashed_password = self._get_hash_password(new_user.password)
