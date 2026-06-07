@@ -5,10 +5,10 @@ from jose import jwt, JWTError
 from datetime import timedelta, UTC, datetime
 from src.config import Config
 from src.models.auth.exception import InvalidJWTToken
-from src.models.auth.models import TokenResponse, LogoutResponse
+from src.models.auth.models_dto import TokenResponse, LogoutResponse
 from src.models.refresh_tokens.exception import RefreshTokenNotFound
 from src.models.refresh_tokens.service import RefreshTokensService
-from src.models.users.dto_models import UsersDTO
+from src.models.users.models_dto import UsersDTO
 from src.models.users.exception import UserNotFound
 from src.models.users.service import UsersService
 
@@ -41,7 +41,7 @@ class TokenService:
         )
 
 
-    def _decode_access_token(self, token: str) -> int:
+    def decode_access_token(self, token: str) -> int:
         """
         :return: user_id
         :raises InvalidJWTToken: невалидный токен
@@ -86,23 +86,6 @@ class TokenService:
         to_encode.update({"exp": expire})
 
         return self._encode_access_token(to_encode)
-
-    async def get_current_user(
-        self,
-        token: str
-    ) -> UsersDTO:
-        """
-        :raises InvalidJWTToken: невалидный токен
-        :raises UserNotFound:
-        """
-
-        user_id = self._decode_access_token(token)
-        result = await self.users_service.get_user_by_id(user_id)
-
-        if not result:
-            raise UserNotFound()
-
-        return result
 
     async def create_token_response(self, user_id: int) -> TokenResponse:
         new_access_token = self.create_access_token(user_id=user_id)

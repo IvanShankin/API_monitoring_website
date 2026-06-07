@@ -6,10 +6,12 @@ from passlib.context import CryptContext
 from src.config import create_config
 from src.models.api.exception_handler import register_exception_handlers
 from src.models.users.views import router as user_router
+from src.models.auth.views import router as auth_router
 
 
 def _include_routers(app: FastAPI) -> FastAPI:
     app.include_router(user_router)
+    app.include_router(auth_router)
     return app
 
 

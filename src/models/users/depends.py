@@ -5,7 +5,7 @@ from src.models.users.repository import UsersRepository
 from src.models.users.service import UsersService
 
 
-async def get_user_service(
+def get_user_service(
     request: Request,
     session = Depends(get_db),
 ) -> UsersService:

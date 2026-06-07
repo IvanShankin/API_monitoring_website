@@ -4,14 +4,14 @@ from starlette import status
 
 from src.models.auth.auth_service import AuthService
 from src.models.auth.depends import get_auth_service, get_token_service, get_current_user
-from src.models.auth.models import TokenResponse, RefreshTokenRequest, LogoutRequest, LogoutResponse
+from src.models.auth.models_dto import TokenResponse, RefreshTokenRequest, LogoutRequest, LogoutResponse
 from src.models.auth.token_service import TokenService
 from src.models.users.depends import get_user_service
-from src.models.users.dto_models import UsersDTO, RegisterUserRequestDTO
+from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
 from src.models.users.service import UsersService
 
 
-router = APIRouter()
+router = APIRouter(prefix="/auth")
 
 
 @router.post("/register", response_model=UsersDTO, status_code=status.HTTP_200_OK)

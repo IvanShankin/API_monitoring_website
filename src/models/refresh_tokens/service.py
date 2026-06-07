@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import Config
 from src.models.base.exception import ServiceException
-from src.models.refresh_tokens.dto_models import RefreshTokenDTO
+from src.models.refresh_tokens.models_dto import RefreshTokenDTO
 from src.models.refresh_tokens.models import RefreshToken
 from src.models.refresh_tokens.repository import RefreshTokenRepository
 
