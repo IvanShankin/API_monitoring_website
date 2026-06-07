@@ -3,8 +3,8 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.base.exception import ServiceException
-from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
 from src.models.users.exception import UserAlreadyExit
+from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
 from src.models.users.repository import UsersRepository
 
 

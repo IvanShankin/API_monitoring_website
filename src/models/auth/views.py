@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
@@ -9,7 +9,6 @@ from src.models.auth.token_service import TokenService
 from src.models.users.depends import get_user_service
 from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
 from src.models.users.service import UsersService
-
 
 router = APIRouter(prefix="/auth")
 

@@ -5,8 +5,6 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from src.config import Config
-from src.models.users.models import Users
-from src.models.refresh_tokens.models import RefreshToken
 from src.core.database import Base
 
 

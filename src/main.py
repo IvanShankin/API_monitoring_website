@@ -4,7 +4,6 @@ import uvicorn
 
 from src.models.api.app import init_fastapi_app
 
-
 app = init_fastapi_app()
 
 

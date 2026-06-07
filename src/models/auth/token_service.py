@@ -1,14 +1,13 @@
+from datetime import timedelta, UTC, datetime
 from typing import Dict
 
 from jose import jwt, JWTError
 
-from datetime import timedelta, UTC, datetime
 from src.config import Config
 from src.models.auth.exception import InvalidJWTToken
 from src.models.auth.models_dto import TokenResponse, LogoutResponse
 from src.models.refresh_tokens.exception import RefreshTokenNotFound
 from src.models.refresh_tokens.service import RefreshTokensService
-from src.models.users.models_dto import UsersDTO
 from src.models.users.exception import UserNotFound
 from src.models.users.service import UsersService
 

@@ -4,7 +4,6 @@ from starlette import status
 from src.models.auth.depends import get_current_user
 from src.models.users.models_dto import UserResponse
 
-
 router = APIRouter(prefix="/users")
 
 

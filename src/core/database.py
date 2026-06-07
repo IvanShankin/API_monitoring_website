@@ -2,12 +2,11 @@ from typing import AsyncIterator
 
 from fastapi import Depends
 from sqlalchemy import inspect
-from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import declarative_base
 
-from src.models.depends import get_config
 from src.config import Config
-
+from src.models.depends import get_config
 
 Base_sqlalchemy = declarative_base()
 
