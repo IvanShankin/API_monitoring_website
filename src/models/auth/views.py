@@ -53,9 +53,7 @@ async def logout(
     token_service: TokenService = Depends(get_token_service)
 ):
     """Удаляет refresh токен только который передаётся"""
-    await token_service.logout(token.refresh_token)
-
-    return {"status": "success"}
+    return await token_service.logout(token.refresh_token)
 
 
 
