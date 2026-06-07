@@ -13,6 +13,13 @@ class UsersDTO(ORMDTO):
     created_at: datetime
 
 
+class UserResponse(ORMDTO):
+    id: int
+    email: EmailStr
+    username: str
+    created_at: datetime
+
+
 class RegisterUserRequestDTO(BaseModel):
     email: EmailStr
     username: str

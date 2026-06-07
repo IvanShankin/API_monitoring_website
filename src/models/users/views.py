@@ -1,16 +1,15 @@
-from fastapi import APIRouter, Depends, Request
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends
 from starlette import status
 
-from src.models.users.depends import get_user_service
-from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
-from src.models.users.service import UsersService
+from src.models.auth.depends import get_current_user
+from src.models.users.models_dto import UserResponse
+
 
 router = APIRouter(prefix="/users")
 
 
-@router.get("/me", response_model=UsersDTO, status_code=status.HTTP_200_OK)
-async def get_me():
-    pass
-    # Сперва сделать сервис аунтификации
+@router.get("/me", response_model=UserResponse, status_code=status.HTTP_200_OK)
+async def get_me(user = Depends(get_current_user)):
+    return user
+
 
