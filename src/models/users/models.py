@@ -14,3 +14,4 @@ class Users(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     refresh_tokens = relationship("RefreshToken", back_populates="user")
+    websites = relationship("Websites", back_populates="user")
