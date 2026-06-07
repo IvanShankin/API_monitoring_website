@@ -5,6 +5,7 @@ from src.models.auth.exception import InvalidCredentials
 from src.models.base.exception import ServiceException
 from src.models.refresh_tokens.exception import RefreshTokenNotFound
 from src.models.users.exception import UserAlreadyExit, UserNotFound
+from src.models.utils.exception import NotPermission
 
 
 def register_exception_handlers(app: FastAPI):
@@ -16,6 +17,10 @@ def register_exception_handlers(app: FastAPI):
     @app.exception_handler(UserAlreadyExit)
     async def service_handler(request, exc):
         return JSONResponse(status_code=409, content={"detail": "Email already exit"})
+
+    @app.exception_handler(NotPermission)
+    async def service_handler(request, exc):
+        return JSONResponse(status_code=403, content={"detail": "Not permission"})
 
     @app.exception_handler(InvalidCredentials)
     async def service_handler(request, exc):
