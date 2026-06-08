@@ -14,7 +14,7 @@ class BaseRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add(self, instance: ModelType):
+    def add(self, instance: ModelType):
         self.session.add(instance)
         return instance
 

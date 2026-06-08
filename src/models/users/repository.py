@@ -19,7 +19,7 @@ class UsersRepository(BaseRepository):
             hashed_password=hashed_password,
         )
 
-        return await self.add(user)
+        return self.add(user)
 
     async def get_user_by_id(self, user_id: int) -> Users:
         return await self.get_by_id(Users, user_id)

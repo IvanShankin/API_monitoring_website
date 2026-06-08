@@ -20,7 +20,7 @@ class RefreshTokenRepository(BaseRepository):
             token=token,
             expires_at=expires_at,
         )
-        return await self.add(token)
+        return self.add(token)
 
     async def get_token(self, token: str) -> RefreshToken | None:
         result_db = await self.session.execute(
