@@ -26,3 +26,9 @@ class RegisterUserRequestDTO(BaseModel):
     password: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CreateUserDTO(BaseModel):
+    email: str
+    username: str
+    hashed_password: str

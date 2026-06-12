@@ -2,25 +2,26 @@ from datetime import datetime, UTC
 from typing import List, Optional
 
 from sqlalchemy import delete, select, update
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.base.database_model import BaseRepository
 from src.models.refresh_tokens.models import RefreshToken
+from src.models.refresh_tokens.models_dto import CreateRefreshTokenDTO
 
 
 class RefreshTokenRepository(BaseRepository):
 
+    def __init__(self, session: AsyncSession,):
+        super().__init__(
+            session,
+            RefreshToken,
+        )
+
     async def add_token(
         self,
-        user_id: int,
-        token: str,
-        expires_at: datetime,
+        data: CreateRefreshTokenDTO,
     ) -> RefreshToken:
-        token = RefreshToken(
-            user_id=user_id,
-            token=token,
-            expires_at=expires_at,
-        )
-        return self.add(token)
+        return self.add(data)
 
     async def get_token(self, token: str) -> RefreshToken | None:
         result_db = await self.session.execute(

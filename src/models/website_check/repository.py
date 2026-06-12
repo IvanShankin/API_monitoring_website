@@ -1,31 +1,24 @@
 from typing import List
 
 from sqlalchemy import delete, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.base.database_model import BaseRepository
-from src.models.website_check.models import ErrorType, WebsiteChecks
+from src.models.website_check.models import WebsiteChecks
+from src.models.website_check.models_dto import CreateWebsiteChecksDTO
 
 
-class WebsiteCheck(BaseRepository):
+class WebsiteCheckRepository(BaseRepository):
+
+    def __init__(self, session: AsyncSession):
+        super().__init__(session=session, model=WebsiteChecks)
 
     async def added_website_checks(
         self,
-        website_id: int,
-        http_status_code: int,
-        response_time_ms: int,
-        is_available: bool,
-        error_type: ErrorType,
-        error_message: str,
+        data: CreateWebsiteChecksDTO
     ) -> WebsiteChecks:
         return self.add(
-            instance=WebsiteChecks(
-                website_id=website_id,
-                http_status_code=http_status_code,
-                response_time_ms=response_time_ms,
-                is_available=is_available,
-                error_type=error_type,
-                error_message=error_message,
-            )
+            data
         )
 
     async def get_website_checks_by_check_id(self, website_check_id: int) -> WebsiteChecks | None:

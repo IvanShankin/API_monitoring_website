@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.base.exception import ServiceException
 from src.models.users.exception import UserAlreadyExit
-from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO
+from src.models.users.models_dto import UsersDTO, RegisterUserRequestDTO, CreateUserDTO
 from src.models.users.repository import UsersRepository
 
 
@@ -60,9 +60,11 @@ class UsersService:
 
         try:
             result = await self.users_repo.add_user(
-                email=new_user.email,
-                username=new_user.username,
-                hashed_password=hashed_password
+                data=CreateUserDTO(
+                    email=new_user.email,
+                    username=new_user.username,
+                    hashed_password=hashed_password,
+                )
             )
             await self.session_db.commit()
             await self.session_db.refresh(result)

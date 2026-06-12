@@ -1,4 +1,5 @@
-from typing import TypeVar
+from typing import TypeVar, Type
+from pydantic import BaseModel
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,15 +7,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import Base
 
 # Объявляем generic тип, ограниченный классом Base
-ModelType = TypeVar("ModelType", bound="Base")
+ModelType = TypeVar("ModelType", bound=Base)
+DTOType = TypeVar("DTOType", bound="BaseModel")
 
 
 class BaseRepository:
 
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession, model: Type[ModelType]):
         self.session = session
+        self.model = model
 
-    def add(self, instance: ModelType):
+    def add(self, data: DTOType) -> ModelType:
+        instance = self.model(**data.model_dump())
         self.session.add(instance)
         return instance
 

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.config import Config
 from src.models.base.exception import ServiceException
 from src.models.refresh_tokens.models import RefreshToken
-from src.models.refresh_tokens.models_dto import RefreshTokenDTO
+from src.models.refresh_tokens.models_dto import RefreshTokenDTO, CreateRefreshTokenDTO
 from src.models.refresh_tokens.repository import RefreshTokenRepository
 
 
@@ -56,9 +56,11 @@ class RefreshTokensService:
     async def create_token(self, user_id: int) -> RefreshTokenDTO | None:
         return await self._execute_with_retry(
             lambda: self.token_repo.add_token(
-                user_id=user_id,
-                token=self._generate_unique_token(),
-                expires_at=self._generate_expires_at(),
+                data=CreateRefreshTokenDTO(
+                    user_id=user_id,
+                    token=self._generate_unique_token(),
+                    expires_at=self._generate_expires_at(),
+                )
             )
         )
 
