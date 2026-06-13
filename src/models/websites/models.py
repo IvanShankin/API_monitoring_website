@@ -18,4 +18,4 @@ class Websites(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("Users", back_populates="websites")
-    website_checks = relationship("WebsiteChecks", back_populates="website")
+    website_checks = relationship("WebsiteChecks", back_populates="website", cascade="all, delete-orphan")

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.responses import JSONResponse
 
 from src.models.auth.exception import InvalidCredentials
-from src.models.base.exception import ServiceException
+from src.models.base.exception import ServiceException, NoDataForUpdate
 from src.models.refresh_tokens.exception import RefreshTokenNotFound
 from src.models.users.exception import UserAlreadyExit, UserNotFound
 from src.models.utils.exception import NotPermission
@@ -33,3 +33,7 @@ def register_exception_handlers(app: FastAPI):
     @app.exception_handler(UserNotFound)
     async def service_handler(request, exc):
         return JSONResponse(status_code=401, content={"detail": "User not found"})
+
+    @app.exception_handler(NoDataForUpdate)
+    async def service_handler(request, exc):
+        return JSONResponse(status_code=400, content={"detail": "did not transmit data"})

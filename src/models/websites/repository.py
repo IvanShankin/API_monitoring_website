@@ -6,7 +6,7 @@ from sqlalchemy import update, select, delete
 from src.models.base.database_model import BaseRepository
 from src.models.websites.exception import NoDataForUpdateWebsite
 from src.models.websites.models import Websites
-from src.models.websites.models_dto import CreateWebsitesDTO, UpdateWebsiteDTO
+from src.models.websites.models_dto import CreateWebsitesDTO, UpdateWebsiteDTO, WebsitesDTO
 
 
 class WebsiteRepository(BaseRepository):
@@ -29,6 +29,16 @@ class WebsiteRepository(BaseRepository):
             .where(Websites.id == website_id)
         )
         return result_db.scalar_one_or_none()
+
+    async def get_all_websites(
+        self,
+        user_id: int,
+    ) -> List[WebsitesDTO]:
+        result_db = await self.session.execute(
+            select(Websites)
+            .where(Websites.user_id == user_id)
+        )
+        return result_db.scalars().all()
 
     async def update_website(
         self,
