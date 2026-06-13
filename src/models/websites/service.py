@@ -2,6 +2,7 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.models.websites.exception import WebsiteNotFound
 from src.models.websites.models_dto import CreateWebsitesDTO, UpdateWebsiteDTO, WebsitesDTO
 from src.models.websites.repository import WebsiteRepository
 
@@ -27,9 +28,12 @@ class WebsitesService:
     async def get_website(
         self,
         website_id: int,
-    ) -> WebsitesDTO | None:
+    ) -> WebsitesDTO:
         result = await self.website_repo.get_website(website_id)
-        return WebsitesDTO.model_validate(result) if result else None
+        if not result:
+            raise WebsiteNotFound()
+
+        return WebsitesDTO.model_validate(result)
 
     async def get_all_websites(
         self,
@@ -42,9 +46,15 @@ class WebsitesService:
         self,
         website_id: int,
         data: UpdateWebsiteDTO,
-    ) -> WebsitesDTO | None:
+    ) -> WebsitesDTO:
+        """
+        :exception WebsiteNotFound:
+        """
         result = await self.website_repo.update_website(website_id=website_id, data=data)
-        return WebsitesDTO.model_validate(result) if result else None
+        if not result:
+            raise WebsiteNotFound()
+
+        return WebsitesDTO.model_validate(result)
 
     async def delete_website(
         self,

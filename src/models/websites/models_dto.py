@@ -22,15 +22,17 @@ class WebsitesResponse(WebsitesDTO):
     pass
 
 
-class CreateWebsitesDTO(BaseModel):
-    id: int
-    user_id: int
+class CreateWebsitesRequestDTO(BaseModel):
     url: str
     name: Optional[str] = None
     description: Optional[str] = None
     check_interval_seconds: int = 60
     timeout_in_seconds: int = 15
     is_active: bool = True
+
+
+class CreateWebsitesDTO(CreateWebsitesRequestDTO):
+    user_id: int
 
 
 class UpdateWebsiteDTO(BaseModel):

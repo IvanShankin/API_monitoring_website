@@ -35,13 +35,13 @@ class WebsiteCheckRepository(BaseRepository):
         )
         return result_db.scalars().all()
 
-    async def delete_by_id(self, check_id: int) -> WebsiteChecks | None:
+    async def delete_by_ids(self, check_ids: List[int]) -> List[WebsiteChecks]:
         result_db = await self.session.execute(
             delete(WebsiteChecks)
-            .where(WebsiteChecks.id == check_id)
+            .where(WebsiteChecks.id.in_(check_ids))
             .returning(WebsiteChecks)
         )
-        return result_db.scalar_one_or_none()
+        return result_db.scalars().all()
 
     async def delete_by_website_id(self, website_id: int) -> List[WebsiteChecks]:
         result_db = await self.session.execute(
