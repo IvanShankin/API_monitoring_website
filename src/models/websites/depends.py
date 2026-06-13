@@ -10,5 +10,5 @@ def get_website_service(
 ) -> WebsitesService:
     return WebsitesService(
         website_repo=WebsiteRepository(session),
-        session=session,
+        session_db=session,
     )
