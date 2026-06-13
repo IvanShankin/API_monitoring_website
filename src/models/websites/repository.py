@@ -6,7 +6,7 @@ from sqlalchemy import update, select, delete
 from src.models.base.database_model import BaseRepository
 from src.models.websites.exception import NoDataForUpdateWebsite
 from src.models.websites.models import Websites
-from src.models.websites.models_dto import CreateWebsitesDTO, UpdateWebsiteDTO, WebsitesDTO
+from src.models.websites.models_dto import CreateWebsiteDTO, UpdateWebsiteDTO, WebsitesDTO
 
 
 class WebsiteRepository(BaseRepository):
@@ -16,7 +16,7 @@ class WebsiteRepository(BaseRepository):
 
     async def add_website(
         self,
-        data: CreateWebsitesDTO,
+        data: CreateWebsiteDTO,
     ) -> Websites:
         return self.add(data)
 
@@ -43,15 +43,22 @@ class WebsiteRepository(BaseRepository):
     async def update_website(
         self,
         website_id: int,
+        user_id: int,
         data: UpdateWebsiteDTO,
     ) -> Websites | None:
+        """
+        :exception NoDataForUpdateWebsite:
+        """
         values = data.model_dump(exclude_unset=True)
         if not values:
             raise NoDataForUpdateWebsite()
 
         result_db = await self.session.execute(
             update(Websites)
-            .where(Websites.id == website_id)
+            .where(
+                (Websites.id == website_id) &
+                (Websites.user_id == user_id)
+            )
             .values(**values)
             .returning(Websites)
         )
@@ -59,11 +66,15 @@ class WebsiteRepository(BaseRepository):
 
     async def delete_website(
         self,
+        user_id: int,
         website_ids: List[int],
     ) -> List[Websites]:
         result_db = await self.session.execute(
             delete(Websites)
-            .where(Websites.in_(website_ids))
+            .where(
+                (Websites.id.in_(website_ids)) &
+                (Websites.user_id == user_id)
+            )
             .returning(Websites)
         )
         return result_db.scalars().all()

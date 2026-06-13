@@ -18,11 +18,11 @@ class WebsitesDTO(ORMDTO):
     created_at: datetime
 
 
-class WebsitesResponse(WebsitesDTO):
+class WebsiteResponse(WebsitesDTO):
     pass
 
 
-class CreateWebsitesRequestDTO(BaseModel):
+class CreateWebsiteRequestDTO(BaseModel):
     url: str
     name: Optional[str] = None
     description: Optional[str] = None
@@ -31,7 +31,7 @@ class CreateWebsitesRequestDTO(BaseModel):
     is_active: bool = True
 
 
-class CreateWebsitesDTO(CreateWebsitesRequestDTO):
+class CreateWebsiteDTO(CreateWebsiteRequestDTO):
     user_id: int
 
 
@@ -41,3 +41,7 @@ class UpdateWebsiteDTO(BaseModel):
     check_interval_seconds: Optional[int] = None
     timeout_in_seconds: Optional[int] = None
     is_active: Optional[bool] = None
+
+
+class UpdateWebsiteRequestDTO(UpdateWebsiteDTO):
+    pass

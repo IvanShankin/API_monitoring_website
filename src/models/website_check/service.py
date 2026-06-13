@@ -21,6 +21,7 @@ class WebsiteChecksService:
         result = await self.website_check_repo.added_website_checks(
             data=data
         )
+        await self.session_db.refresh(result)
         await self.session_db.commit()
         return WebsiteChecksDTO.model_validate(result)
 
