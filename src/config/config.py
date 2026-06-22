@@ -34,11 +34,17 @@ class EnvConfig(BaseModel):
 
     redis_host: str
     redis_port: int
+    redis_url: str
+
+    rabbitmq_url: str
 
     mode: str
 
     @classmethod
     def build(cls) -> "EnvConfig":
+        redis_host = os.environ['REDIS_HOST']
+        redis_port = int(os.environ['REDIS_PORT'])
+
         return cls(
             secret_key=os.environ['SECRET_KEY'],
             db_host=os.environ['DB_HOST'],
@@ -47,8 +53,11 @@ class EnvConfig(BaseModel):
             db_password=os.environ['DB_PASSWORD'],
             db_name=os.environ['DB_NAME'],
 
-            redis_host=os.environ['REDIS_HOST'],
-            redis_port=int(os.environ['REDIS_PORT']),
+            redis_host=redis_host,
+            redis_port=redis_port,
+            redis_url=f"redis://{redis_host}:{redis_port}",
+
+            rabbitmq_url=os.environ['RABBITMQ_URL'],
 
             mode=os.environ['MODE']
         )
