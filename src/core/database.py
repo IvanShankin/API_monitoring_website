@@ -5,7 +5,7 @@ from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import declarative_base
 
-from src.config import Config
+from src.core.config import Config
 from src.models.depends import get_config
 
 Base_sqlalchemy = declarative_base()

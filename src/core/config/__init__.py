@@ -1,4 +1,4 @@
-from src.config.config import Config
+from src.core.config.config import Config
 
 
 def create_config() -> Config:
