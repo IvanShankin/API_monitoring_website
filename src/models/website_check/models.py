@@ -12,6 +12,7 @@ class ErrorType(enum.Enum):
     SSL_ERROR = "ssl_error"
     CONNECTION_ERROR = "connection_error"
     HTTP_ERROR = "http_error"
+    OTHER_ERROR = "other_error"
 
 
 class WebsiteChecks(Base):
@@ -20,7 +21,7 @@ class WebsiteChecks(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     website_id = Column(Integer, ForeignKey("websites.id"), nullable=False)
     http_status_code = Column(Integer, nullable=True)
-    response_time_ms = Column(Integer, nullable=False)
+    response_time_ms = Column(Integer, nullable=True)
     is_available = Column(Boolean, nullable=False)
 
     error_type = Column(

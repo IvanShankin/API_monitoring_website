@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -25,8 +26,8 @@ class WebsiteChecksDTOResponse(WebsiteChecksDTO):
 
 class CreateWebsiteChecksDTO(BaseModel):
     website_id: int
-    http_status_code: int
-    response_time_ms: int
+    http_status_code: int | None
+    response_time_ms: int | None
     is_available: bool
-    error_type: str
-    error_message: str
+    error_type: Optional[ErrorType] = None
+    error_message: Optional[str] = None
