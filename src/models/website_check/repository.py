@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import delete, select, and_, exists
+from sqlalchemy import delete, select, and_, exists, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.base.database_model import BaseRepository
@@ -21,6 +21,22 @@ class WebsiteCheckRepository(BaseRepository):
         return self.add(
             data
         )
+
+    async def bulk_add(
+        self,
+        data: List[CreateWebsiteChecksDTO],
+    ) -> None:
+        if not data:
+            return
+
+        stmt = insert(WebsiteChecks).values(
+            [
+                item.model_dump()
+                for item in data
+            ]
+        )
+
+        await self.session.execute(stmt)
 
     async def get_website_checks_by_check_id(self, website_check_id: int, user_id: int) -> WebsiteChecks | None:
         result_db = await self.session.execute(
