@@ -17,6 +17,8 @@ class Config:
         self.max_attempts_enter: int = 15
         self.login_block_time: timedelta = timedelta(seconds=200) # Период блокировки при частых попытках войти
 
+        self.size_batch_website: int = 100 # 100 сайтов для одной задачи celery
+
         self.env = EnvConfig.build()
         self.db_connection = DbConnectionConfig.build(self.env)
         self.paths = PathsConfig.build()

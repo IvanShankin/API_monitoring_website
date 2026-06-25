@@ -5,7 +5,7 @@ from typing import Callable, Awaitable, List
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config import Config
+from src.core.config import Config
 from src.models.base.exception import ServiceException
 from src.models.refresh_tokens.models import RefreshToken
 from src.models.refresh_tokens.models_dto import RefreshTokenDTO, CreateRefreshTokenDTO

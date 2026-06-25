@@ -3,7 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from passlib.context import CryptContext
 
-from src.config import create_config
+from src.core.config import create_config
+from src.infrastructure.celery.app import configure_celery_app
 from src.models.api.exception_handler import register_exception_handlers
 from src.models.auth.views import router as auth_router
 from src.models.users.views import router as user_router
@@ -31,10 +32,16 @@ def init_fastapi_app() -> FastAPI:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.config = create_config()
+    config = create_config()
+    app.state.config = config
     app.state.cr_context = CryptContext(
         schemes=["bcrypt"],
         deprecated="auto"
+    )
+
+    configure_celery_app(
+        broker_url=config.env.rabbitmq_url,
+        result_backend=config.env.redis_url,
     )
 
     try:

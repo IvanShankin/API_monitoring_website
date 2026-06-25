@@ -1,6 +1,6 @@
 from fastapi import Request
 
-from src.config import Config
+from src.core.config import Config
 
 
 def get_config(request: Request) -> Config:
