@@ -13,6 +13,13 @@ class ErrorType(enum.Enum):
     CONNECTION_ERROR = "connection_error"
     HTTP_ERROR = "http_error"
     OTHER_ERROR = "other_error"
+    CONNECTION_TIMEOUT = "connection_timeout"
+    READ_TIMEOUT = "read_timeout"
+    WRITE_TIMEOUT = "write_timeout"
+    POOL_TIMEOUT = "pool_timeout"
+    INVALID_URL = "invalid_url"
+    DECODING_ERROR = "decoding_error"
+    PROTOCOL_ERROR = "protocol_error"
 
 
 class WebsiteChecks(Base):
