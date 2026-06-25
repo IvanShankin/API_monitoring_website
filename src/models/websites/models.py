@@ -15,6 +15,7 @@ class Websites(Base):
     check_interval_seconds = Column(Integer, nullable=False, server_default=text("60"))
     timeout_in_seconds = Column(Integer, nullable=False, server_default=text("10"))
     is_active = Column(Boolean, nullable=False)
+    last_check_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("Users", back_populates="websites")

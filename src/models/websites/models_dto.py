@@ -15,6 +15,7 @@ class WebsitesDTO(ORMDTO):
     check_interval_seconds: int
     timeout_in_seconds: int
     is_active: bool
+    last_check_at: datetime
     created_at: datetime
 
 
@@ -41,6 +42,7 @@ class UpdateWebsiteDTO(BaseModel):
     check_interval_seconds: Optional[int] = None
     timeout_in_seconds: Optional[int] = None
     is_active: Optional[bool] = None
+    last_check_at: Optional[datetime] = None
 
 
 class UpdateWebsiteRequestDTO(UpdateWebsiteDTO):
