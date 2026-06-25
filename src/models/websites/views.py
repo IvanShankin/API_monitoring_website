@@ -39,7 +39,7 @@ async def get_website_by_id(
     user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):
-    websites = await website_service.get_all_websites(user_id=user.id)
+    websites = await website_service.get_all_websites_by_user(user_id=user.id)
     return [WebsiteResponse.model_validate(website) for website in websites]
 
 

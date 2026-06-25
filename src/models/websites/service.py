@@ -1,3 +1,4 @@
+from datetime import datetime, UTC
 from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -42,11 +43,21 @@ class WebsitesService:
 
         return WebsitesDTO.model_validate(result)
 
-    async def get_all_websites(
+    async def get_websites_for_tests(
+        self,
+    ) -> List[WebsitesDTO]:
+        """
+        :return: Все вебсайты, которые необходимо проверить на текущий момент
+        """
+        datetime_now = datetime.now(UTC)
+        websites = await self.website_repo.get_websites_for_tests(datetime_now)
+        return [WebsitesDTO.model_validate(website) for website in websites]
+
+    async def get_all_websites_by_user(
         self,
         user_id: int,
     ) -> List[WebsitesDTO]:
-        websites = await self.website_repo.get_all_websites(user_id)
+        websites = await self.website_repo.get_all_websites_by_users(user_id)
         return [WebsitesDTO.model_validate(website) for website in websites]
 
     async def update_website(
