@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update, select, delete, func
+from sqlalchemy import update, select, delete, func, text
 
 from src.models.base.database_model import BaseRepository
 from src.models.websites.exception import NoDataForUpdateWebsite
@@ -31,15 +31,13 @@ class WebsiteRepository(BaseRepository):
         )
         return result_db.scalar_one_or_none()
 
-    async def get_websites_for_tests(self, date_from: datetime) -> List[WebsitesDTO]:
-        result_db = await self.session.execute(
+    async def get_active_websites(self) -> List[WebsitesDTO]:
+        result = await self.session.execute(
             select(Websites)
-            .where(
-                Websites.is_active == True,
-                date_from > Websites.last_check_at + func.make_interval(secs=Websites.check_interval_seconds)
-            )
+            .where(Websites.is_active.is_(True))
         )
-        return result_db.scalars().all()
+
+        return result.scalars().all()
 
     async def get_all_websites_by_users(
         self,

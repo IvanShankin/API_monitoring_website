@@ -50,8 +50,19 @@ class WebsitesService:
         :return: Все вебсайты, которые необходимо проверить на текущий момент
         """
         datetime_now = datetime.now(UTC)
-        websites = await self.website_repo.get_websites_for_tests(datetime_now)
-        return [WebsitesDTO.model_validate(website) for website in websites]
+        websites = await self.website_repo.get_active_websites()
+        websites_for_check: List[WebsitesDTO] = []
+
+        for website in websites:
+            next_check = (
+                website.last_check_at.timestamp()
+                + website.check_interval_seconds
+            )
+
+            if datetime_now.timestamp() >= next_check:
+                websites_for_check.append(WebsitesDTO.model_validate(website))
+
+        return websites_for_check
 
     async def get_all_websites_by_user(
         self,

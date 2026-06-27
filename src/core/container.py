@@ -8,6 +8,9 @@ from src.models.website_check.service import WebsiteCheckService
 from src.models.websites.repository import WebsiteRepository
 from src.models.websites.service import WebsitesService
 
+# Не удалять. Используется для подгрузки всех моделей БД
+from src.models.db_models import *
+
 
 class Container:
 
