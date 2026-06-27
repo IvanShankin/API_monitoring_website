@@ -43,4 +43,5 @@ class Container:
         )
 
 
-container = Container()
+def create_container() -> Container:
+    return Container()
