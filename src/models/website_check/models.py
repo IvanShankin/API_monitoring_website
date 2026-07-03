@@ -1,9 +1,9 @@
 import enum
 
-from sqlalchemy import Column, Integer, String, func, DateTime, ForeignKey, Boolean, text, Enum
+from sqlalchemy import Column, Integer, String, func, DateTime, ForeignKey, Boolean, Enum
 from sqlalchemy.orm import relationship
 
-from src.core.database import Base
+from src.core.database.database import Base
 
 
 class ErrorType(enum.Enum):

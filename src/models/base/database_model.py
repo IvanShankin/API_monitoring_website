@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.database import Base
+from src.core.database.database import Base
 
 # Объявляем generic тип, ограниченный классом Base
 ModelType = TypeVar("ModelType", bound=Base)

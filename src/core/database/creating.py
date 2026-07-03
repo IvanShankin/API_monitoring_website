@@ -1,19 +1,14 @@
-import asyncio
 import logging
-
-from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy import text
 
 from src.core.config import Config
-
-# Не удалять. Используется для подгрузки всех моделей БД
 from src.core.database.database import Base
 
-async def create_database():
+
+async def create_database(conf: Config):
     """Создает базу данных и все таблицы в ней (если существует, то ничего не произойдёт) """
     # Сначала подключаемся к серверу PostgreSQL без указания конкретной базы
-    conf = Config()
-
     engine = create_async_engine(conf.db_connection.postgres_server_url, isolation_level="AUTOCOMMIT")
 
     try:
@@ -25,31 +20,41 @@ async def create_database():
             database_exists = result.scalar() == 1
 
             if not database_exists: # если БД нет
-                logging.info(f"Creating database {conf.env.db_name}...")
+                logging.info(f"Creating _database {conf.env.db_name}...")
                 await conn.execute(text(f"CREATE DATABASE {conf.env.db_name}"))
                 logging.info(f"Database {conf.env.db_name} created successfully")
             else:
                 logging.info(f"Database {conf.env.db_name} already exists")
     except Exception as e:
-        logging.error(f"Error checking/creating database: {e}")
-        raise
+        logging.exception(f"Error checking/creating _database: {e}")
+        raise e
     finally:
         await engine.dispose()
 
     # создаем таблицы в целевой базе данных
-    engine = create_async_engine(conf.db_connection.sql_db_url)
+    engine = create_async_engine(conf.db_connection.sql_db_url, connect_args={"statement_cache_size": 0})
     try:
         async with engine.begin() as conn:
-            logging.info("Creating database tables...")
+            logging.info("Creating _database tables...")
             await conn.run_sync(Base.metadata.create_all)
             logging.info("Database tables created successfully")
     except Exception as e:
-        logging.error(f"Error creating tables: {e}")
-        raise
+        logging.exception(f"Error creating tables: {e}")
+        raise e
     finally:
         await engine.dispose()
 
 
-
-if __name__ == "__main__":
-    asyncio.run(create_database())
+async def create_table(conf: Config):
+    """создает таблицы в целевой базе данных"""
+    engine = create_async_engine(conf.db_connection.sql_db_url, connect_args={"statement_cache_size": 0})
+    try:
+        async with engine.begin() as conn:
+            logging.info("Creating core tables...")
+            await conn.run_sync(Base.metadata.create_all)
+            logging.info("Database tables created successfully")
+    except Exception as e:
+        logging.exception(f"Error creating tables: {e}")
+        raise e
+    finally:
+        await engine.dispose()
