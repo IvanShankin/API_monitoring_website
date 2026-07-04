@@ -1,8 +1,9 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Callable
 
 import pytest_asyncio
 from fastapi import FastAPI
 from httpx import AsyncClient, ASGITransport
+from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -10,6 +11,12 @@ from src.core.config import create_config, Config
 from src.core.database.database import get_db
 from src.models.api.app import init_fastapi_app
 from src.models.depends import get_config
+
+
+@pytest_asyncio.fixture(scope="session", autouse=True)
+async def lifespan_for_tests(app_fastapi: FastAPI, config_fix: Config, crypto_context_fix: CryptContext ) -> AsyncGenerator[FastAPI, None]:
+    app_fastapi.state.config = config_fix
+    app_fastapi.state.cr_context = crypto_context_fix
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -22,7 +29,15 @@ async def config_fix() -> AsyncGenerator[Config, None]:
     yield create_config()
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(scope="session")
+async def crypto_context_fix() -> AsyncGenerator[CryptContext, None]:
+    yield CryptContext(
+        schemes=["bcrypt"],
+        deprecated="auto"
+    )
+
+
+@pytest_asyncio.fixture(scope="function")
 async def session_db(config_fix: Config):
     engine = create_async_engine(config_fix.db_connection.sql_db_url)
 
@@ -37,6 +52,20 @@ async def session_db(config_fix: Config):
         yield session
 
     await engine.dispose()
+
+
+@pytest_asyncio.fixture(scope="function")
+async def not_open_session_db(config_fix: Config) -> sessionmaker:
+    engine = create_async_engine(config_fix.db_connection.sql_db_url)
+
+    async_session = sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+        autoflush=False
+    )
+
+    return async_session
 
 
 @pytest_asyncio.fixture
