@@ -8,11 +8,15 @@ from src.infrastructure.celery.app import configure_celery_app
 from src.models.api.exception_handler import register_exception_handlers
 from src.models.auth.views import router as auth_router
 from src.models.users.views import router as user_router
+from src.models.websites.views import router as websites_router
+from src.models.website_check.views import router as website_check_router
 
 
 def _include_routers(app: FastAPI) -> FastAPI:
     app.include_router(user_router)
     app.include_router(auth_router)
+    app.include_router(websites_router)
+    app.include_router(website_check_router)
     return app
 
 
