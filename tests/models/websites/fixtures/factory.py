@@ -3,8 +3,8 @@ from typing import Optional
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models.users.fixtures.factory import create_user_factory
-from models.websites.fixtures.models_dto import CreateWebsiteFixtureDTO
+from tests.models.users.fixtures.factory import create_user_factory
+from .models_dto import CreateWebsiteFixtureDTO
 from src.models.websites.models import Websites
 from src.models.websites.models_dto import WebsitesDTO
 

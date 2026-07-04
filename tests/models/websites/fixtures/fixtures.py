@@ -3,8 +3,8 @@ from typing import Optional
 import pytest_asyncio
 from passlib.context import CryptContext
 
-from models.websites.fixtures.factory import create_website_factory
-from models.websites.fixtures.models_dto import CreateWebsiteFixtureDTO
+from .factory import create_website_factory
+from .models_dto import CreateWebsiteFixtureDTO
 from src.core.config import Config
 from src.models.websites.models_dto import WebsitesDTO
 
