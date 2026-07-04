@@ -11,8 +11,8 @@ from src.core.database.database import Base
 
 def _get_dict(obj: Any) -> Dict:
     if isinstance(obj, dict): return obj
-    if isinstance(obj, bytes): return orjson.loads(obj)
-    if isinstance(obj, BaseModel): return obj.model_dump()
+    elif isinstance(obj, bytes): return orjson.loads(obj)
+    elif isinstance(obj, BaseModel): return obj.model_dump()
     elif isinstance(obj, Base): return obj.to_dict()
     else: raise RuntimeError(f"невалидный формат у: {obj}")
 

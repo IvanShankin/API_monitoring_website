@@ -2,6 +2,7 @@ from tests.fixturs.fixtures import app_fastapi, config_fix, session_db, client_w
     not_open_session_db, lifespan_for_tests
 
 from tests.models.users.fixtures import create_user
+from tests.models.websites.fixtures import create_website_fixture
 
 __all__ = [
     "lifespan_for_tests",
@@ -13,4 +14,5 @@ __all__ = [
 
     # из моделей
     "create_user",
+    "create_website_fixture",
 ]
