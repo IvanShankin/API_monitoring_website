@@ -4,10 +4,10 @@ from helpers.functions import comparison_models
 
 
 @pytest.mark.asyncio
-async def test_get_me(client_with_db, create_user):
+async def test_get_me(client_for_tests, create_user):
     user, accesses_token = await create_user()
 
-    response = await client_with_db.get(
+    response = await client_for_tests.get(
         "/users/me",
         headers={"Authorization": f"Bearer {accesses_token}"}
     )
