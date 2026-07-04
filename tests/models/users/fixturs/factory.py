@@ -23,9 +23,9 @@ def _random_string(length: int = 10) -> str:
 async def create_user_factory(
     session_db: AsyncSession,
     crypto_context: CryptContext,
-    email: Optional[str],
-    username: Optional[str],
-    hashed_password: Optional[str],
+    email: Optional[str] = None,
+    username: Optional[str] = None,
+    hashed_password: Optional[str] = None,
 ) -> UsersDTO:
     user = Users(
         email=_random_string() + "@mail.com" if email is None else email,
@@ -36,6 +36,7 @@ async def create_user_factory(
     )
     session_db.add(user)
     await session_db.commit()
+    await session_db.refresh(user)
 
     return UsersDTO.model_validate(user)
 

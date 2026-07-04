@@ -5,6 +5,7 @@ import pytest_asyncio
 from jose import jwt
 from passlib.context import CryptContext
 
+from helpers import test_crypto_context
 from src.core.config import Config
 from src.models.users.models_dto import UsersDTO
 from tests.models.users.fixturs.factory import create_user_factory
@@ -26,7 +27,6 @@ def create_accesses_token(user_id: int, conf: Config) -> str:
 
 @pytest_asyncio.fixture(scope="function")
 async def create_user(
-    crypto_context_fix: CryptContext,
     config_fix: Config,
     not_open_session_db
 ):
@@ -42,7 +42,7 @@ async def create_user(
         async with not_open_session_db() as session:
             user = await create_user_factory(
                 session_db=session,
-                crypto_context=crypto_context_fix,
+                crypto_context=test_crypto_context,
                 email=email,
                 username=username,
                 hashed_password=hashed_password,

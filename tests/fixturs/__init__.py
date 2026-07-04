@@ -1,4 +1,4 @@
-from tests.fixturs.fixturs import app_fastapi, crypto_context_fix, config_fix, session_db, client_with_db, \
+from tests.fixturs.fixturs import app_fastapi, config_fix, session_db, client_with_db, \
     not_open_session_db, lifespan_for_tests
 
 from tests.models.users.fixturs.fixturs import create_user
@@ -10,7 +10,6 @@ __all__ = [
     "session_db",
     "not_open_session_db",
     "client_with_db",
-    "crypto_context_fix",
 
     # из моделей
     "create_user",
