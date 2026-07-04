@@ -1,14 +1,14 @@
 from datetime import datetime, UTC, timedelta
-from typing import Optional, Tuple, Callable
+from typing import Tuple
 
 import pytest_asyncio
 from jose import jwt
-from passlib.context import CryptContext
 
-from helpers import test_crypto_context
+from tests.helpers import test_crypto_context
+from tests.models.users.fixtures.models_dto import CreateUserFixtureDTO
 from src.core.config import Config
 from src.models.users.models_dto import UsersDTO
-from tests.models.users.fixturs.factory import create_user_factory
+from tests.models.users.fixtures.factory import create_user_factory
 
 
 def create_accesses_token(user_id: int, conf: Config) -> str:
@@ -35,17 +35,13 @@ async def create_user(
     """
 
     async def _factory(
-        email: Optional[str] = None,
-        username: Optional[str] = None,
-        hashed_password: Optional[str] = None,
+        new_user: CreateUserFixtureDTO = CreateUserFixtureDTO(),
     ) -> Tuple[UsersDTO, str]:
         async with not_open_session_db() as session:
             user = await create_user_factory(
                 session_db=session,
                 crypto_context=test_crypto_context,
-                email=email,
-                username=username,
-                hashed_password=hashed_password,
+                new_user=new_user,
             )
 
             access_token = create_accesses_token(user.id, config_fix)
