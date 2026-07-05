@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 from datetime import datetime
 from typing import Type, Any, Dict
 
@@ -38,3 +40,8 @@ def comparison_models(Expected: Type | dict, Actual: Type | dict, keys_not_check
                     return False
 
         return True
+
+
+def random_string(length: int = 10) -> str:
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))

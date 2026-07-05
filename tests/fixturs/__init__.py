@@ -3,7 +3,7 @@ from tests.fixturs.replace_services import website_service_fixture, user_service
 from tests.fixturs.fixtures import app_fastapi, config_fix, client_for_tests, \
     lifespan_for_tests
 
-from tests.models.users.fixtures import create_user
+from tests.models.users.fixtures import create_user_fixture
 from tests.models.websites.fixtures import create_website_fixture
 
 __all__ = [
@@ -21,6 +21,6 @@ __all__ = [
     "user_service_fixture",
 
     # из моделей
-    "create_user",
+    "create_user_fixture",
     "create_website_fixture",
 ]

@@ -3,6 +3,7 @@ from typing import Optional
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from helpers.functions import random_string
 from tests.models.users.fixtures.factory import create_user_factory
 from .models_dto import CreateWebsiteFixtureDTO
 from src.models.websites.models import Websites
@@ -16,6 +17,9 @@ async def create_website_factory(
 ) -> WebsitesDTO:
     if new_website is None:
         new_website = CreateWebsiteFixtureDTO()
+
+    if new_website.url is None:
+        new_website.url = random_string()
 
     if new_website.user_id is None:
         user = await create_user_factory(session_db, crypto_context)

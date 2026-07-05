@@ -26,7 +26,7 @@ def create_accesses_token(user_id: int, conf: Config) -> str:
 
 
 @pytest_asyncio.fixture(scope="function")
-async def create_user(
+async def create_user_fixture(
     config_fix: Config,
     not_open_session_db
 ):

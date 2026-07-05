@@ -8,6 +8,6 @@ class CreateWebsiteFixtureDTO(BaseModel):
     url: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
-    check_interval_seconds: Optional[int] = None
-    timeout_in_seconds: Optional[int] = None
-    is_active: Optional[bool] = None
+    check_interval_seconds: Optional[int] = 60
+    timeout_in_seconds: Optional[int] = 15
+    is_active: Optional[bool] = True

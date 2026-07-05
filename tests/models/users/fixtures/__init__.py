@@ -1,5 +1,5 @@
-from tests.models.users.fixtures.fixtures import create_user
+from tests.models.users.fixtures.fixtures import create_user_fixture
 
 __all__ = [
-    "create_user",
+    "create_user_fixture",
 ]
