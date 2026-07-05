@@ -25,8 +25,8 @@ class WebsitesService:
     ) -> WebsitesDTO:
         result = await self.website_repo.add_website(data)
 
-        await self.session_db.refresh(result)
         await self.session_db.commit()
+        await self.session_db.refresh(result)
 
         return WebsitesDTO.model_validate(result)
 

@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette import status
 
 from src.models.auth.depends import get_current_user
@@ -16,7 +16,7 @@ router = APIRouter(prefix="/websites")
 @router.post("/create_website", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
 async def create_website(
     data: CreateWebsiteRequestDTO,
-    user = Depends(get_current_user),
+    user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):
     data_for_creating = CreateWebsiteDTO(user_id=user.id, **data.model_dump())
@@ -35,7 +35,7 @@ async def get_website_by_id(
 
 
 @router.get("/get_all_websites", response_model=List[WebsiteResponse], status_code=status.HTTP_200_OK)
-async def get_website_by_id(
+async def get_all_websites(
     user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):
@@ -60,7 +60,7 @@ async def update_website(
 
 @router.delete("/delete_websites", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_websites(
-    website_ids: List[int],
+    website_ids: List[int] = Query(..., min_length=1),
     user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):

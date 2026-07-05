@@ -42,7 +42,6 @@ class UpdateWebsiteDTO(BaseModel):
     check_interval_seconds: Optional[int] = None
     timeout_in_seconds: Optional[int] = None
     is_active: Optional[bool] = None
-    last_check_at: Optional[datetime] = None
 
 
 class UpdateWebsiteRequestDTO(UpdateWebsiteDTO):
