@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette import status
 
 from src.models.auth.depends import get_current_user
@@ -17,7 +17,7 @@ router = APIRouter()
     response_model=WebsiteChecksDTOResponse,
     status_code=status.HTTP_200_OK
 )
-async def get_website_by_id(
+async def get_website_check_by_id(
     check_id: int,
     user: UsersDTO = Depends(get_current_user),
     website_check_service: WebsiteCheckService = Depends(get_website_check_service),
@@ -29,7 +29,8 @@ async def get_website_by_id(
 @router.get(
     "/websites/{website_id}/checks",
     response_model=List[WebsiteChecksDTOResponse],
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    description="Проверки возвращаются отсортированы по дате создания ASC",
 )
 async def get_checks_by_website_id(
     website_id: int,
@@ -40,9 +41,9 @@ async def get_checks_by_website_id(
     return [WebsiteChecksDTOResponse.model_validate(check) for check in website_check]
 
 
-@router.delete("/website_checks", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_website_checks(
-    website_checks_ids: List[int],
+@router.delete("/website_check", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_website_check(
+    website_checks_ids: List[int] = Query(..., min_length=1),
     user: UsersDTO = Depends(get_current_user),
     website_check_service: WebsiteCheckService = Depends(get_website_check_service),
 ):

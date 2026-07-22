@@ -57,6 +57,7 @@ class WebsiteCheckRepository(BaseRepository):
                 (WebsiteChecks.website_id == website_id) &
                 (Websites.user_id == user_id)
             )
+            .order_by(Websites.created_at.asc())
         )
         return result_db.scalars().all()
 
