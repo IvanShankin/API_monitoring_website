@@ -84,7 +84,7 @@ class WebsiteCheckRepository(BaseRepository):
             delete(WebsiteChecks)
             .where(
                 and_(
-                    WebsiteChecks.id == website_id,
+                    WebsiteChecks.website_id == website_id,
                     exists().where(
                         and_(
                             WebsiteChecks.website_id == Websites.id,
