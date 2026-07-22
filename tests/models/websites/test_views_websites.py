@@ -47,7 +47,7 @@ class TestsForSuccess:
         user, accesses_token = await create_user_fixture()
 
         response = await client_for_tests.post(
-            "/websites/create_website",
+            "/websites",
             headers={"Authorization": f"Bearer {accesses_token}"},
             json=CreateWebsiteRequestDTO(
                 url="test url",
@@ -79,7 +79,7 @@ class TestsForSuccess:
         )
 
         response = await client_for_tests.get(
-            f"/websites/get_website/{website.id}",
+            f"/websites/{website.id}",
             headers={"Authorization": f"Bearer {accesses_token}"},
         )
 
@@ -106,7 +106,7 @@ class TestsForSuccess:
         )
 
         response = await client_for_tests.get(
-            f"/websites/get_all_websites",
+            f"/websites",
             headers={"Authorization": f"Bearer {accesses_token}"},
         )
 
@@ -140,7 +140,7 @@ class TestsForSuccess:
         )
 
         response = await client_for_tests.put(
-            f"/websites/update_website/{website.id}",
+            f"/websites/{website.id}",
             headers={"Authorization": f"Bearer {accesses_token}"},
             json=UpdateWebsiteRequestDTO(
                     name="new_name",
@@ -181,7 +181,7 @@ class TestsForSuccess:
         )
 
         response = await client_for_tests.delete(
-            f"/websites/delete_websites",
+            f"/websites",
             headers={"Authorization": f"Bearer {accesses_token}"},
             params=[
                 ("website_ids", website.id)
