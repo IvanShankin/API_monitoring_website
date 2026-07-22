@@ -30,7 +30,7 @@ async def create_website_checks(
         website_id=new_websites_checks.website_id,
         http_status_code=new_websites_checks.http_status_code,
         response_time_ms=new_websites_checks.response_time_ms,
-        is_available=new_websites_checks.response_time_ms,
+        is_available=new_websites_checks.is_available,
         error_type=new_websites_checks.error_type,
         error_message=new_websites_checks.error_message,
     )
