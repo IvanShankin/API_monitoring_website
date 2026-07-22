@@ -10,12 +10,12 @@ from src.models.website_check.models import ErrorType
 class WebsiteChecksDTO(ORMDTO):
     id: int
     website_id: int
-    http_status_code: int
-    response_time_ms: int
+    http_status_code: Optional[int]
+    response_time_ms: Optional[int]
     is_available: bool
 
-    error_type: ErrorType
-    error_message: str
+    error_type: Optional[ErrorType]
+    error_message: Optional[str]
 
     checked_at: datetime
 

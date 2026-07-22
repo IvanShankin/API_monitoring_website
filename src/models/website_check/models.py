@@ -39,7 +39,7 @@ class WebsiteChecks(Base):
         ),
         nullable=True
     )
-    error_message = Column(String, nullable=False)
+    error_message = Column(String, nullable=True)
 
     checked_at = Column(DateTime(timezone=True), server_default=func.now())
 
