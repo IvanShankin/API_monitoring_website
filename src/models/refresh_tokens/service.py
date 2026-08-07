@@ -64,6 +64,14 @@ class RefreshTokensService:
             )
         )
 
+    async def set_is_revoked(self, refresh_token: str) -> RefreshTokenDTO | None:
+        """
+        Не сохраняет данные!
+        :return: Вернёт токен если есть что обновить.
+        """
+        token = await self.token_repo.set_is_revoked(refresh_token)
+        return RefreshTokenDTO.model_validate(token) if token else None
+
     async def update_token(self, old_token: str) -> RefreshTokenDTO | None:
         return await self._execute_with_retry(
             lambda: self.token_repo.update_refresh_token(

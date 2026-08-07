@@ -42,6 +42,16 @@ class RefreshTokenRepository(BaseRepository):
         db_token = result.scalar_one_or_none()
         return db_token
 
+    async def set_is_revoked(self, refresh_token: str) -> RefreshToken | None:
+        result = await self.session.execute(
+            update(RefreshToken)
+            .where(RefreshToken.token == refresh_token)
+            .values(is_revoked=True,)
+            .returning(RefreshToken)
+        )
+        db_token = result.scalar_one_or_none()
+        return db_token
+
     async def update_refresh_token(
         self,
         old_token: str,

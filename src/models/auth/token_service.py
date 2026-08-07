@@ -107,6 +107,8 @@ class TokenService:
         if not user:
             raise UserNotFound()
 
+        await self.refresh_token_service.set_is_revoked(old_refresh_token)
+
         return await self.create_token_response(user_id=user.id)
 
     async def logout(self, refresh_token: str) -> LogoutResponse:
