@@ -21,9 +21,10 @@ async def create_user_factory(
     user = Users(
         email=random_string() + "@mail.com" if new_user.email is None else new_user.email,
         username=random_string() if new_user.username is None else new_user.username,
-        hashed_password=_get_hash_password(crypto_context=crypto_context, password=random_string())
-        if new_user.hashed_password is None else
-        new_user.hashed_password,
+        hashed_password=_get_hash_password(
+            crypto_context=crypto_context,
+            password=random_string() if new_user.password is None else new_user.password
+        )
     )
     session_db.add(user)
     await session_db.commit()
