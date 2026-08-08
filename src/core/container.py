@@ -1,8 +1,8 @@
-from typing import AsyncIterator
+from typing import AsyncIterator, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.config import create_config
+from src.core.config import create_config, Config
 from src.models.website_check.repository import WebsiteCheckRepository
 from src.models.website_check.service import WebsiteCheckService
 from src.models.websites.repository import WebsiteRepository
@@ -14,8 +14,11 @@ from src.models.db_models import *
 
 class Container:
 
-    def __init__(self) -> None:
-        self.config = create_config()
+    def __init__(
+        self,
+        config: Optional[Config] = None,
+    ) -> None:
+        self.config = config if config else create_config()
         self.async_session_factory = self.config.db_connection.session_local
 
     async def get_db(
