@@ -3,8 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from helpers import test_crypto_context
 from src.core.container import Container
+from src.models.monitoring.service import WebsiteMonitorService
 from src.models.users.repository import UsersRepository
 from src.models.users.service import UsersService
+from src.models.website_check.repository import WebsiteCheckRepository
 from src.models.websites.repository import WebsiteRepository
 from src.models.websites.service import WebsitesService
 
@@ -34,3 +36,12 @@ async def website_service_fixture(session_db: AsyncSession) -> WebsitesService:
         session_db=session_db,
     )
 
+
+@pytest_asyncio.fixture(scope="function")
+async def website_monitor_service_fixture(session_db: AsyncSession) -> WebsiteMonitorService:
+    return WebsiteMonitorService(
+        website_check_repo=WebsiteCheckRepository(
+            session=session_db,
+        ),
+        session_db=session_db,
+    )
