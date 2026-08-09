@@ -55,7 +55,6 @@ class WebsiteMonitorService:
             await self.website_check_repo.bulk_add(results)
             await self.session_db.commit()
 
-
     async def fetch_site(
         self,
         client: AsyncClient,
