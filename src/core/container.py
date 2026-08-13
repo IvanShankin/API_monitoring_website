@@ -3,6 +3,7 @@ from typing import AsyncIterator, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.config import create_config, Config
+from src.infrastructure.logger import setup_logging
 from src.models.website_check.repository import WebsiteCheckRepository
 from src.models.website_check.service import WebsiteCheckService
 from src.models.websites.repository import WebsiteRepository
@@ -20,6 +21,7 @@ class Container:
     ) -> None:
         self.config = config if config else create_config()
         self.async_session_factory = self.config.db_connection.session_local
+        self.logger = setup_logging(log_file=self.config.paths.log_file)
 
     async def get_db(
         self,
