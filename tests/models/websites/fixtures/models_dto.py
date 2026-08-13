@@ -12,4 +12,4 @@ class CreateWebsiteFixtureDTO(BaseModel):
     check_interval_seconds: Optional[int] = 60
     timeout_in_seconds: Optional[int] = 15
     is_active: Optional[bool] = True
-    created_at: Optional[datetime] = True
+    created_at: Optional[datetime] = None

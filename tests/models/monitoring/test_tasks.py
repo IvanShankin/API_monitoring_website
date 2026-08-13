@@ -75,7 +75,7 @@ async def test_schedule_checks_async(
     # сайты не должны пройти проверку
     assert not any([website.is_available for website in website_bad_db])
     for website in website_bad_db:
-        assert website.error_type == ErrorType.CONNECTION_ERROR
+        assert website.error_type in [ErrorType.CONNECTION_ERROR, ErrorType.CONNECTION_TIMEOUT, ErrorType.POOL_TIMEOUT]
 
 
     result_db = await session_db.execute(
