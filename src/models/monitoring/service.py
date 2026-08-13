@@ -1,5 +1,8 @@
 import asyncio
 import time
+from datetime import datetime, UTC
+from logging import Logger
+from typing import List
 
 import httpx
 from httpx import (
@@ -20,6 +23,7 @@ from src.models.website_check.models import ErrorType
 from src.models.website_check.models_dto import CreateWebsiteChecksDTO
 from src.models.website_check.repository import WebsiteCheckRepository
 from src.models.websites.models_dto import WebsitesDTO
+from src.models.websites.repository import WebsiteRepository
 
 
 class WebsiteMonitorService:
@@ -27,11 +31,25 @@ class WebsiteMonitorService:
     def __init__(
         self,
         website_check_repo: WebsiteCheckRepository,
+        website_repo: WebsiteRepository,
         session_db: AsyncSession,
+        logger: Logger,
     ):
         self.semaphore = asyncio.Semaphore(50)
         self.website_check_repo = website_check_repo
+        self.website_repo = website_repo
         self.session_db = session_db
+        self.logger = logger
+
+    async def _removed_errors(
+        self,
+        check_website: List[CreateWebsiteChecksDTO | Exception],
+    ):
+        self.logger.warning("Произошла ошибк(а/ки) при проверке сайт")
+        for check in check_website:
+            if check is Exception:
+                self.logger.exception(check)
+                check_website.remove(check)
 
     async def monitor(
         self,
@@ -51,8 +69,16 @@ class WebsiteMonitorService:
                 *tasks,
                 return_exceptions=True
             )
+            check_at = datetime.now(UTC)
+
+            if Exception in results:
+                await self._removed_errors(results)
 
             await self.website_check_repo.bulk_add(results)
+            await self.website_repo.set_last_check_at(
+                dt=check_at,
+                website_ids=[ws.id for ws in websites]
+            )
             await self.session_db.commit()
 
     async def fetch_site(

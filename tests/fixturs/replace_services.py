@@ -2,7 +2,9 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from helpers import test_crypto_context
+from src.core.config import Config
 from src.core.container import Container
+from src.infrastructure.logger import setup_logging
 from src.models.monitoring.service import WebsiteMonitorService
 from src.models.users.repository import UsersRepository
 from src.models.users.service import UsersService
@@ -30,18 +32,16 @@ async def user_service_fixture(session_db: AsyncSession) -> UsersService:
 @pytest_asyncio.fixture(scope="function")
 async def website_service_fixture(session_db: AsyncSession) -> WebsitesService:
     return WebsitesService(
-        website_repo=WebsiteRepository(
-            session=session_db,
-        ),
+        website_repo=WebsiteRepository(session=session_db),
         session_db=session_db,
     )
 
 
 @pytest_asyncio.fixture(scope="function")
-async def website_monitor_service_fixture(session_db: AsyncSession) -> WebsiteMonitorService:
+async def website_monitor_service_fixture(session_db: AsyncSession, config_fix: Config) -> WebsiteMonitorService:
     return WebsiteMonitorService(
-        website_check_repo=WebsiteCheckRepository(
-            session=session_db,
-        ),
+        website_check_repo=WebsiteCheckRepository(session=session_db),
+        website_repo=WebsiteRepository(session=session_db),
         session_db=session_db,
+        logger=setup_logging(config_fix.paths.log_file),
     )

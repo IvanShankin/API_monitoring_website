@@ -14,7 +14,9 @@ async def monitor_batch_async(
     async with container.async_session_factory() as session:
         service = WebsiteMonitorService(
             website_check_repo=container.get_website_check_repository(session),
+            website_repo=container.get_website_repository(session),
             session_db=session,
+            logger=container.logger,
         )
 
         await service.monitor(websites)

@@ -73,6 +73,25 @@ class WebsiteRepository(BaseRepository):
         )
         return result_db.scalar_one_or_none()
 
+    async def set_last_check_at(
+        self,
+        dt: datetime,
+        website_ids: List[int],
+    ) -> List[Websites]:
+        """
+        Установит дату последний проверки `dt`
+        :param dt: С timezone
+        """
+        result_db = await self.session.execute(
+            update(Websites)
+            .where(
+                (Websites.id.in_(website_ids))
+            )
+            .values(last_check_at=dt)
+            .returning(Websites)
+        )
+        return result_db.scalars().all()
+
     async def delete_website(
         self,
         user_id: int,
