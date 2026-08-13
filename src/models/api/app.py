@@ -43,11 +43,6 @@ async def lifespan(app: FastAPI):
         deprecated="auto"
     )
 
-    configure_celery_app(
-        broker_url=config.env.rabbitmq_url,
-        result_backend=config.env.redis_url,
-    )
-
     try:
         yield
     finally:
