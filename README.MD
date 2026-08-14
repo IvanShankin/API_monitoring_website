@@ -290,3 +290,4 @@ password: guest
           ↓
 9. Пользователь получает историю проверок через API
 ```
+Задание получено с :solvit.space/projects/uptime_monitor
