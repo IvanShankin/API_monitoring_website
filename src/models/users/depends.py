@@ -1,6 +1,6 @@
 from fastapi import Request, Depends
 
-from src.core.database import get_db
+from src.core.database.database import get_db
 from src.models.users.repository import UsersRepository
 from src.models.users.service import UsersService
 

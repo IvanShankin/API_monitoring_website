@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, func, DateTime, ForeignKey, Boolean, text
 from sqlalchemy.orm import relationship
 
-from src.core.database import Base
+from src.core.database.database import Base
 
 
 class Websites(Base):
@@ -15,6 +15,7 @@ class Websites(Base):
     check_interval_seconds = Column(Integer, nullable=False, server_default=text("60"))
     timeout_in_seconds = Column(Integer, nullable=False, server_default=text("10"))
     is_active = Column(Boolean, nullable=False)
+    last_check_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("Users", back_populates="websites")

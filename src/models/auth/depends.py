@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from src.config import Config
+from src.core.config import Config
 from src.models.auth.auth_service import AuthService
 from src.models.auth.login import oauth2_scheme
 from src.models.auth.token_service import TokenService

@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
-from src.config.base import init_env
+from src.core.config.base import init_env
 
 
 class Config:
@@ -16,6 +16,8 @@ class Config:
         self.max_active_sessions: int = 10
         self.max_attempts_enter: int = 15
         self.login_block_time: timedelta = timedelta(seconds=200) # Период блокировки при частых попытках войти
+
+        self.size_batch_website: int = 100 # 100 сайтов для одной задачи celery
 
         self.env = EnvConfig.build()
         self.db_connection = DbConnectionConfig.build(self.env)
@@ -34,11 +36,17 @@ class EnvConfig(BaseModel):
 
     redis_host: str
     redis_port: int
+    redis_url: str
+
+    rabbitmq_url: str
 
     mode: str
 
     @classmethod
     def build(cls) -> "EnvConfig":
+        redis_host = os.environ['REDIS_HOST']
+        redis_port = int(os.environ['REDIS_PORT'])
+
         return cls(
             secret_key=os.environ['SECRET_KEY'],
             db_host=os.environ['DB_HOST'],
@@ -47,8 +55,11 @@ class EnvConfig(BaseModel):
             db_password=os.environ['DB_PASSWORD'],
             db_name=os.environ['DB_NAME'],
 
-            redis_host=os.environ['REDIS_HOST'],
-            redis_port=int(os.environ['REDIS_PORT']),
+            redis_host=redis_host,
+            redis_port=redis_port,
+            redis_url=f"redis://{redis_host}:{redis_port}",
+
+            rabbitmq_url=os.environ['RABBITMQ_URL'],
 
             mode=os.environ['MODE']
         )

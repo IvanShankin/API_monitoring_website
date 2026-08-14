@@ -3,7 +3,7 @@ from typing import Dict
 
 from jose import jwt, JWTError
 
-from src.config import Config
+from src.core.config import Config
 from src.models.auth.exception import InvalidJWTToken
 from src.models.auth.models_dto import TokenResponse, LogoutResponse
 from src.models.refresh_tokens.exception import RefreshTokenNotFound
@@ -106,6 +106,8 @@ class TokenService:
 
         if not user:
             raise UserNotFound()
+
+        await self.refresh_token_service.set_is_revoked(old_refresh_token)
 
         return await self.create_token_response(user_id=user.id)
 

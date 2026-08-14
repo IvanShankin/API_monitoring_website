@@ -29,11 +29,9 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     auth_service: AuthService = Depends(get_auth_service)
 ):
-    username = form_data.username
-    password = form_data.password
     return await auth_service.login(
-        username=username,
-        password=password
+        username=form_data.username,
+        password=form_data.password
     )
 
 

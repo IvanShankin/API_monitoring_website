@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from src.core.database import get_db
+from src.core.database.database import get_db
 from src.models.depends import get_config
 from src.models.refresh_tokens.repository import RefreshTokenRepository
 from src.models.refresh_tokens.service import RefreshTokensService

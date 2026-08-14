@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from src.core.database import get_db
+from src.core.database.database import get_db
 from src.models.website_check.repository import WebsiteCheckRepository
 from src.models.website_check.service import WebsiteCheckService
 

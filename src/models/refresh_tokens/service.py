@@ -5,7 +5,7 @@ from typing import Callable, Awaitable, List
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config import Config
+from src.core.config import Config
 from src.models.base.exception import ServiceException
 from src.models.refresh_tokens.models import RefreshToken
 from src.models.refresh_tokens.models_dto import RefreshTokenDTO, CreateRefreshTokenDTO
@@ -63,6 +63,14 @@ class RefreshTokensService:
                 )
             )
         )
+
+    async def set_is_revoked(self, refresh_token: str) -> RefreshTokenDTO | None:
+        """
+        Не сохраняет данные!
+        :return: Вернёт токен если есть что обновить.
+        """
+        token = await self.token_repo.set_is_revoked(refresh_token)
+        return RefreshTokenDTO.model_validate(token) if token else None
 
     async def update_token(self, old_token: str) -> RefreshTokenDTO | None:
         return await self._execute_with_retry(

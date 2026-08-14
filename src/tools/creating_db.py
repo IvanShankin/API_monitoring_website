@@ -4,14 +4,10 @@ import logging
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from src.config import Config
+from src.core.config import Config
 
-# не удалять, иначе не подгрузится вся БД
-from src.models.users.models import Users
-from src.models.refresh_tokens.models import RefreshToken
-from src.models.websites.models import Websites
-from src.models.website_check.models import WebsiteChecks
-from src.core.database import Base
+# Не удалять. Используется для подгрузки всех моделей БД
+from src.core.database.database import Base
 
 async def create_database():
     """Создает базу данных и все таблицы в ней (если существует, то ничего не произойдёт) """

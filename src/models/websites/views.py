@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette import status
 
 from src.models.auth.depends import get_current_user
@@ -13,10 +13,10 @@ from src.models.websites.service import WebsitesService
 router = APIRouter(prefix="/websites")
 
 
-@router.post("/create_website", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
+@router.post("", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
 async def create_website(
     data: CreateWebsiteRequestDTO,
-    user = Depends(get_current_user),
+    user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):
     data_for_creating = CreateWebsiteDTO(user_id=user.id, **data.model_dump())
@@ -24,7 +24,7 @@ async def create_website(
     return WebsiteResponse.model_validate(result)
 
 
-@router.get("/get_website/{website_id}", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
+@router.get("/{website_id}", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
 async def get_website_by_id(
     website_id: int,
     user: UsersDTO = Depends(get_current_user),
@@ -34,16 +34,16 @@ async def get_website_by_id(
     return WebsiteResponse.model_validate(website)
 
 
-@router.get("/get_all_websites", response_model=List[WebsiteResponse], status_code=status.HTTP_200_OK)
-async def get_website_by_id(
+@router.get("", response_model=List[WebsiteResponse], status_code=status.HTTP_200_OK)
+async def get_all_websites(
     user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):
-    websites = await website_service.get_all_websites(user_id=user.id)
+    websites = await website_service.get_all_websites_by_user(user_id=user.id)
     return [WebsiteResponse.model_validate(website) for website in websites]
 
 
-@router.put("/update_website/{website_id}", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
+@router.put("/{website_id}", response_model=WebsiteResponse, status_code=status.HTTP_200_OK)
 async def update_website(
     website_id: int,
     data: UpdateWebsiteRequestDTO,
@@ -58,9 +58,9 @@ async def update_website(
     return WebsiteResponse.model_validate(website)
 
 
-@router.delete("/delete_websites", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_websites(
-    website_ids: List[int],
+    website_ids: List[int] = Query(..., min_length=1),
     user: UsersDTO = Depends(get_current_user),
     website_service: WebsitesService = Depends(get_website_service),
 ):

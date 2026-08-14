@@ -1,7 +1,8 @@
+from datetime import datetime
 from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update, select, delete
+from sqlalchemy import update, select, delete, func, text
 
 from src.models.base.database_model import BaseRepository
 from src.models.websites.exception import NoDataForUpdateWebsite
@@ -30,7 +31,15 @@ class WebsiteRepository(BaseRepository):
         )
         return result_db.scalar_one_or_none()
 
-    async def get_all_websites(
+    async def get_active_websites(self) -> List[WebsitesDTO]:
+        result = await self.session.execute(
+            select(Websites)
+            .where(Websites.is_active.is_(True))
+        )
+
+        return result.scalars().all()
+
+    async def get_all_websites_by_users(
         self,
         user_id: int,
     ) -> List[WebsitesDTO]:
@@ -63,6 +72,25 @@ class WebsiteRepository(BaseRepository):
             .returning(Websites)
         )
         return result_db.scalar_one_or_none()
+
+    async def set_last_check_at(
+        self,
+        dt: datetime,
+        website_ids: List[int],
+    ) -> List[Websites]:
+        """
+        Установит дату последний проверки `dt`
+        :param dt: С timezone
+        """
+        result_db = await self.session.execute(
+            update(Websites)
+            .where(
+                (Websites.id.in_(website_ids))
+            )
+            .values(last_check_at=dt)
+            .returning(Websites)
+        )
+        return result_db.scalars().all()
 
     async def delete_website(
         self,

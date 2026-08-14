@@ -39,10 +39,10 @@ class WebsiteCheckService:
         checks = await self.website_check_repo.get_website_checks_by_website_id(website_id=website_id, user_id=user_id)
         return [WebsiteChecksDTO.model_validate(check) for check in checks]
 
-    async def delete_by_ids(self, check_ids: List[int], user_id: int) -> WebsiteChecksDTO:
+    async def delete_by_ids(self, check_ids: List[int], user_id: int) -> List[WebsiteChecksDTO]:
         result = await self.website_check_repo.delete_by_ids(check_ids=check_ids, user_id=user_id)
         await self.session_db.commit()
-        return WebsiteChecksDTO.model_validate(result)
+        return [WebsiteChecksDTO.model_validate(check) for check in result]
 
     async def delete_by_website_id(self, website_id: int, user_id: int) -> List[WebsiteChecksDTO]:
         result = await self.website_check_repo.delete_by_website_id(website_id=website_id, user_id=user_id)

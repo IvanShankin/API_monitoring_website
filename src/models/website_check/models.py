@@ -1,9 +1,9 @@
 import enum
 
-from sqlalchemy import Column, Integer, String, func, DateTime, ForeignKey, Boolean, text, Enum
+from sqlalchemy import Column, Integer, String, func, DateTime, ForeignKey, Boolean, Enum
 from sqlalchemy.orm import relationship
 
-from src.core.database import Base
+from src.core.database.database import Base
 
 
 class ErrorType(enum.Enum):
@@ -12,6 +12,14 @@ class ErrorType(enum.Enum):
     SSL_ERROR = "ssl_error"
     CONNECTION_ERROR = "connection_error"
     HTTP_ERROR = "http_error"
+    OTHER_ERROR = "other_error"
+    CONNECTION_TIMEOUT = "connection_timeout"
+    READ_TIMEOUT = "read_timeout"
+    WRITE_TIMEOUT = "write_timeout"
+    POOL_TIMEOUT = "pool_timeout"
+    INVALID_URL = "invalid_url"
+    DECODING_ERROR = "decoding_error"
+    PROTOCOL_ERROR = "protocol_error"
 
 
 class WebsiteChecks(Base):
@@ -20,7 +28,7 @@ class WebsiteChecks(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     website_id = Column(Integer, ForeignKey("websites.id"), nullable=False)
     http_status_code = Column(Integer, nullable=True)
-    response_time_ms = Column(Integer, nullable=False)
+    response_time_ms = Column(Integer, nullable=True)
     is_available = Column(Boolean, nullable=False)
 
     error_type = Column(
@@ -31,7 +39,7 @@ class WebsiteChecks(Base):
         ),
         nullable=True
     )
-    error_message = Column(String, nullable=False)
+    error_message = Column(String, nullable=True)
 
     checked_at = Column(DateTime(timezone=True), server_default=func.now())
 

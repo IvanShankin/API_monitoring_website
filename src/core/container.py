@@ -1,0 +1,52 @@
+from typing import AsyncIterator, Optional
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.core.config import create_config, Config
+from src.infrastructure.logger import setup_logging
+from src.models.website_check.repository import WebsiteCheckRepository
+from src.models.website_check.service import WebsiteCheckService
+from src.models.websites.repository import WebsiteRepository
+from src.models.websites.service import WebsitesService
+
+# Не удалять. Используется для подгрузки всех моделей БД
+from src.models.db_models import *
+
+
+class Container:
+
+    def __init__(
+        self,
+        config: Optional[Config] = None,
+    ) -> None:
+        self.config = config if config else create_config()
+        self.async_session_factory = self.config.db_connection.session_local
+        self.logger = setup_logging(log_file=self.config.paths.log_file)
+
+    async def get_db(
+        self,
+    ) -> AsyncIterator[AsyncSession]:
+        async with self.async_session_factory() as session:
+            yield session
+
+    def get_website_repository(self, session: AsyncSession) -> WebsiteRepository:
+        return WebsiteRepository(session=session)
+
+    def get_website_service(self, session: AsyncSession) -> WebsitesService:
+        return WebsitesService(
+            website_repo=self.get_website_repository(session),
+            session_db=session
+        )
+
+    def get_website_check_repository(self, session: AsyncSession) -> WebsiteCheckRepository:
+        return WebsiteCheckRepository(session=session)
+
+    def get_website_check_service(self, session: AsyncSession) -> WebsiteCheckService:
+        return WebsiteCheckService(
+            website_check_repo=self.get_website_check_repository(session),
+            session_db=session
+        )
+
+
+def create_container() -> Container:
+    return Container()

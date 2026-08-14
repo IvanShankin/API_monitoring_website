@@ -9,6 +9,7 @@ class RefreshTokenDTO(ORMDTO):
     refresh_token_id: int
     user_id: int
     token: str
+    is_revoked: bool
     expires_at: datetime
     created_at: datetime
 

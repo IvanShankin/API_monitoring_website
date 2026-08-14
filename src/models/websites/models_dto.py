@@ -15,6 +15,7 @@ class WebsitesDTO(ORMDTO):
     check_interval_seconds: int
     timeout_in_seconds: int
     is_active: bool
+    last_check_at: datetime
     created_at: datetime
 
 
